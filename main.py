@@ -118,9 +118,9 @@ async def process_file(file_content: str, file_extension: str) -> str:
     Обрабатывает файл в зависимости от его расширения (.py, .ts, .cs).
     """
     manual_mapping = {
-        ".py": "python.txt",
-        ".ts": "typescript.txt",
-        ".cs": "csharp.txt"
+        ".py": "manual/python.txt",
+        ".ts": "maual/typescript.txt",
+        ".cs": "manual/csharp.txt"
     }
 
     manual_name = manual_mapping.get(file_extension)
