@@ -97,7 +97,7 @@ async def process_chunks(file_content: str, manual_name: str) -> str:
         return manual_content
 
     for i, chunk in enumerate(chunks):
-        user_message = f"Проанализируй этот текст (чанк {i + 1}/{len(chunks)}):\n```\n{chunk}\n```"
+        user_message = f"Проанализируй этот файл на соответствие руководству (чанк {i + 1}/{len(chunks)}):\n```\n{chunk}\n``` Дай ответ на русском языке!"
         system_message = f"Руководство:\n```\n{manual_content}\n```"
 
         response = await evraza_client.post_message(user_message, system_message)
@@ -176,6 +176,8 @@ def handle_document(message):
     """
     file_info = bot.get_file(message.document.file_id)
     downloaded_file = bot.download_file(file_info.file_path)
+
+    bot.reply_to(message, "Начинаю обработку!")
 
     file_extension = f".{message.document.file_name.split('.')[-1]}"
     if file_extension == ".zip":
