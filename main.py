@@ -97,7 +97,7 @@ async def process_chunks(file_content: str, manual_name: str) -> str:
         return manual_content
 
     for i, chunk in enumerate(chunks):
-        user_message = f"Проанализируй этот файл на соответствие руководству (чанк {i + 1}/{len(chunks)}):\n```\n{chunk}\n``` Дай ответ на русском языке!"
+        user_message = f"Проанализируй этот текст (чанк {i + 1}/{len(chunks)}):\n```\n{chunk}\n```"
         system_message = f"Руководство:\n```\n{manual_content}\n```"
 
         response = await evraza_client.post_message(user_message, system_message)
@@ -115,12 +115,12 @@ async def process_chunks(file_content: str, manual_name: str) -> str:
 
 async def process_file(file_content: str, file_extension: str) -> str:
     """
-    Обрабатывает файл в зависимости от его расширения (.py, .ts, .cs).
+    Обрабатывает файл в зависимости от его расширения (.py, .tsx, .cs).
     """
     manual_mapping = {
-        ".py": "manual/python.txt",
-        ".ts": "maual/typescript.txt",
-        ".cs": "manual/csharp.txt"
+        ".py": "python.txt",
+        ".tsx": "typescript.txt",
+        ".cs": "csharp.txt"
     }
 
     manual_name = manual_mapping.get(file_extension)
@@ -133,7 +133,7 @@ async def process_archive(zip_file):
     """
     Обрабатывает архив, включая файлы в папках, и анализирует их содержимое.
     """
-    supported_extensions = {".py", ".ts", ".cs"}  # Поддерживаемые расширения
+    supported_extensions = {".py", ".tsx", ".cs"}  # Поддерживаемые расширения
     with ZipFile(io.BytesIO(zip_file), 'r') as archive:
         reports = []
 
@@ -176,8 +176,6 @@ def handle_document(message):
     """
     file_info = bot.get_file(message.document.file_id)
     downloaded_file = bot.download_file(file_info.file_path)
-
-    bot.reply_to(message, "Начинаю обработку!")
 
     file_extension = f".{message.document.file_name.split('.')[-1]}"
     if file_extension == ".zip":
